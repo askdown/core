@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [],
+    "outDir": "dist",
+    // Published packages don't ship src/, so maps would point nowhere.
+    "sourceMap": false,
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@askdown/core",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Parser, serializer and validator for Askdown, a Markdown-like language for forms.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "repository": { "type": "git", "url": "git+https://github.com/askdown/core.git" },
+  "homepage": "https://askdown.dev",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "keywords": ["forms", "markdown", "dsl", "askdown", "survey"],
+  "scripts": {
+    "sync-spec": "node scripts/sync-spec.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "release": "sh scripts/publish.sh"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.6",
+    "ajv": "^8.20.0",
+    "typescript": "^7.0.2",
+    "vitest": "~4.1.0"
+  }
+}
