@@ -1,6 +1,6 @@
 {
   "name": "@askdown/core",
-  "version": "0.3.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Parser, serializer and validator for Askdown, a Markdown-like language for forms.",
   "license": "MIT",
