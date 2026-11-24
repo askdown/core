@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.0 (????-??-??)
+0.3.0 (2026-11-24)
 ------------------
 
 * Added the `switch` question type: an on-off switch whose answer is a boolean.
