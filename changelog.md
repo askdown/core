@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.3.1 (????-??-??)
+------------------
+
+* Added a Test workflow that type-checks, tests and builds on every push to
+  main and every pull request.
+* Releases are published to the vlt registry with the npm CLI instead of `vlt
+  publish`. They go live right away; only npm releases are staged.
+* The publish jobs are safe to re-run: a version that is already published, or
+  already staged on npm, is skipped instead of failing the job.
+
+
 0.3.0 (2026-11-24)
 ------------------
 
