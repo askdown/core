@@ -142,6 +142,18 @@ describe('checkAnswer', () => {
       { error: 'Answer "Row 2".' },
     ],
     ['? A\n[grid]\n| | Yes {y} | No {n} |\n| Row 1 {r1} |', { r1: 'No' }, { error: 'Choose one of the columns for "r1".' }],
+    ['? A\n[switch]', undefined, { value: false }],
+    ['? A\n[switch]', true, { value: true }],
+    ['? A\n[switch]', false, { value: false }],
+    ['? A\n[switch]', 'on', { value: true }],
+    ['? A\n[switch]', ' TRUE ', { value: true }],
+    ['? A\n[switch]', '', { value: false }],
+    ['? A\n[switch]', 'off', { value: false }],
+    ['? A\n[switch]', 'maybe', { error: 'Expected on or off.' }],
+    ['? A\n[switch]', 1, { error: 'Expected on or off.' }],
+    ['? A *\n[switch]', undefined, { error: 'Switch this on to continue.' }],
+    ['? A *\n[switch]', false, { error: 'Switch this on to continue.' }],
+    ['? A *\n[switch]', true, { value: true }],
   ])('%j with %j', (source, input, expected) => {
     expect(checkAnswer(q(source), input)).toEqual(expected);
   });

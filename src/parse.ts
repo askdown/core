@@ -45,7 +45,8 @@ const OTHER = /^(.*?):?\s*_{3,}$/;
 const FENCE = /^\s*(```|~~~)/;
 const ATTR_BLOCK = /\s*\{([^{}]*)\}\s*$/;
 
-const TYPE_ALIASES: Record<string, QuestionType> = {
+/** Type names from earlier drafts of the spec, with the name to use instead. */
+const REMOVED_TYPES: Record<string, QuestionType> = {
   checkboxes: 'checkbox',
   dropdown: 'select',
   textarea: 'paragraph',
@@ -609,9 +610,10 @@ function parseQuestion(
   if (other) markers.add(other.marker);
   const typeLine = typeSpec?.line ?? lineNo;
   if (typeSpec) {
-    const name = TYPE_ALIASES[typeSpec.name] ?? typeSpec.name;
+    const name = typeSpec.name;
     if (!(QUESTION_TYPES as readonly string[]).includes(name)) {
-      error(typeLine, `Unknown question type "${typeSpec.name}".`);
+      const instead = Object.hasOwn(REMOVED_TYPES, name) ? ` Use [${REMOVED_TYPES[name]}] instead.` : '';
+      error(typeLine, `Unknown question type "${name}".${instead}`);
       type = 'text';
     } else {
       type = name as QuestionType;
@@ -878,6 +880,9 @@ function parseQuestion(
       question = clean({ ...base, type, country });
       break;
     }
+    case 'switch':
+      question = clean({ ...base, type, default: flag('on') });
+      break;
   }
 
   if (typeSpec) {

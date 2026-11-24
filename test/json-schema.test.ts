@@ -90,6 +90,18 @@ describe('responseSchema', () => {
     expect(validate({ a: '+0123456789' })).toBe(false);
   });
 
+  it('describes switches', () => {
+    const optional = compile(form('? A\n[switch]'));
+    expect(optional({ a: false })).toBe(true);
+    expect(optional({ a: true })).toBe(true);
+    expect(optional({ a: 'on' })).toBe(false);
+    // validateResponse always stores a switch on a visited page.
+    expect(optional({})).toBe(false);
+    const required = compile(form('? A *\n[switch]'));
+    expect(required({ a: true })).toBe(true);
+    expect(required({ a: false })).toBe(false);
+  });
+
   it('describes addresses', () => {
     const validate = compile(form('? A\n[address]\n\n? B\n[address country=NL]\n\n? C\n[address country=CA]'));
     const us = { street: 'Main St 1', city: 'Springfield', region: 'IL', postalCode: '62701', country: 'US' };

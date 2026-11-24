@@ -20,8 +20,8 @@ export interface ResponseSchemaOptions {
  * validateResponse(), which stays authoritative: it can't express trimming,
  * accepted file types, date and time ranges, or that a question on a page
  * reached through a jump is only required when that page is visited. Only
- * required questions on pages every respondent visits are listed as
- * required.
+ * required questions, and switches, on pages every respondent visits are
+ * listed as required.
  */
 export function responseSchema(form: Form, options: ResponseSchemaOptions = {}): JsonSchema {
   const always = alwaysVisited(form);
@@ -35,7 +35,8 @@ export function responseSchema(form: Form, options: ResponseSchemaOptions = {}):
         ...(item.help !== undefined && { description: item.help }),
         ...answerSchema(item),
       };
-      if (item.required && always.has(idx)) required.push(item.id);
+      // A switch always has an answer, since off counts as one.
+      if ((item.required || item.type === 'switch') && always.has(idx)) required.push(item.id);
     }
   });
   return {
@@ -176,6 +177,9 @@ function answerSchema(q: Question): JsonSchema {
         })),
       };
     }
+    case 'switch':
+      // A required switch must be on.
+      return q.required ? { const: true } : { type: 'boolean' };
     case 'file':
       return {
         type: 'array',

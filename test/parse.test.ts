@@ -167,6 +167,17 @@ describe('parse', () => {
     expect(q).toEqual({ id: 'a', type: 'ranking', label: 'A', options: [{ label: 'X' }, { label: 'Y' }], shuffle: true });
   });
 
+  it('parses switches', () => {
+    const [a, b] = questions(parse('? A\n[switch]\n\n? B *\n[switch on]').form);
+    expect(a).toEqual({ id: 'a', type: 'switch', label: 'A' });
+    expect(b).toEqual({ id: 'b', type: 'switch', label: 'B', required: true, default: true });
+  });
+
+  it('does not infer a switch from a single checkbox option', () => {
+    const [q] = questions(parse('? A\n- [ ] Yes').form);
+    expect(q).toMatchObject({ type: 'checkbox' });
+  });
+
   it('parses file sizes', () => {
     const [q] = questions(parse('? A\n[file maxsize=1.5MB]').form);
     expect(q).toMatchObject({ maxSize: 1572864 });
@@ -174,6 +185,12 @@ describe('parse', () => {
 
   it.each([
     ['? A\n[bogus]', '2:error:Unknown question type "bogus".'],
+    ['? A\n[dropdown]\n- X', '2:error:Unknown question type "dropdown". Use [select] instead.'],
+    ['? A\n[checkboxes]\n- X', '2:error:Unknown question type "checkboxes". Use [checkbox] instead.'],
+    ['? A\n[textarea]', '2:error:Unknown question type "textarea". Use [paragraph] instead.'],
+    ['? A\n[toggle]', '2:error:Unknown question type "toggle".'],
+    ['? A\n[switch]\n- X', '3:error:Options are not allowed on a switch question.'],
+    ['? A\n[switch off]', '2:warning:Unknown attribute "off" for switch.'],
     ['? A\n- ( ) X\n- [ ] Y', '1:error:Mix of ( ) and [ ] options. Use ( ) for single choice or [ ] for multiple choice.'],
     ['? A\n1. X\n- [ ] Y', '1:error:Mix of numbered and ( ) or [ ] options. Use numbered options only for a ranking.'],
     ['? A\n1. X', '1:error:A ranking needs at least two options.'],
@@ -391,6 +408,8 @@ describe('serialize', () => {
             { id: 'd', type: 'grid', label: 'd', rows: [{ label: 'r' }], columns: [{ label: 'c1' }, { label: 'c2' }] },
             { id: 'e', type: 'file', label: 'e', maxSize: 1000 },
             { id: 'f', type: 'paragraph', label: 'f', help: 'line 1\n\nline 3' },
+            { id: 'g', type: 'switch', label: 'g' },
+            { id: 'h', type: 'switch', label: 'h', required: true, default: true },
           ],
         },
       ],

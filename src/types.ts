@@ -213,6 +213,17 @@ export interface AddressQuestion extends QuestionBase {
   country?: string;
 }
 
+/**
+ * An on-off switch. The answer is a boolean: off unless the respondent
+ * switches it on. When required, it must be switched on, as for agreeing to
+ * terms.
+ */
+export interface SwitchQuestion extends QuestionBase {
+  type: 'switch';
+  /** On by default. */
+  default?: boolean;
+}
+
 export type Question =
   | TextQuestion
   | ParagraphQuestion
@@ -230,7 +241,8 @@ export type Question =
   | RatingQuestion
   | GridQuestion
   | FileQuestion
-  | AddressQuestion;
+  | AddressQuestion
+  | SwitchQuestion;
 
 export type QuestionType = Question['type'];
 
@@ -253,6 +265,7 @@ export const QUESTION_TYPES: readonly QuestionType[] = [
   'checkbox-grid',
   'file',
   'address',
+  'switch',
 ];
 
 export type ChoiceQuestion = RadioQuestion | CheckboxQuestion | SelectQuestion;
@@ -303,12 +316,14 @@ export interface Address {
  * - checkbox-grid: { [row value]: column value[] }
  * - file: FileRef[]
  * - address: Address
+ * - switch: boolean
  *
  * Choices store their `value` (which defaults to the `label`). For radio and
  * checkbox, a value that isn't one of the option values is the text of the
  * "other" option.
  */
 export type AnswerValue =
+  | boolean
   | string
   | number
   | string[]

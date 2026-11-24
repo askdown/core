@@ -57,10 +57,28 @@ export function checkAnswer(q: Question, input: unknown): AnswerCheck {
   if (result.value === undefined) {
     return q.required ? { error: 'This question is required.' } : {};
   }
+  if (q.type === 'switch' && q.required && result.value === false) {
+    return { error: 'Switch this on to continue.' };
+  }
   return result;
 }
 
+/** Strings an HTML form or query string may send for a switch. */
+const SWITCH_ON = new Set(['on', 'true', '1', 'yes']);
+const SWITCH_OFF = new Set(['', 'off', 'false', '0', 'no']);
+
 function normalize(q: Question, input: unknown): AnswerCheck {
+  // An unchecked checkbox isn't submitted at all, so a missing switch is off.
+  if (q.type === 'switch') {
+    if (input === undefined || input === null || input === false) return { value: false };
+    if (input === true) return { value: true };
+    if (typeof input === 'string') {
+      const text = input.trim().toLowerCase();
+      if (SWITCH_ON.has(text)) return { value: true };
+      if (SWITCH_OFF.has(text)) return { value: false };
+    }
+    return { error: 'Expected on or off.' };
+  }
   if (input === undefined || input === null) return {};
   switch (q.type) {
     case 'phone': {
