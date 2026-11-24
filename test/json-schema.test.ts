@@ -1,10 +1,10 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { Ajv2020 } from 'ajv/dist/2020.js';
 import { describe, expect, it } from 'vitest';
 import { type Form, parse, responseSchema, validateResponse } from '../src/index.ts';
+import { specPath } from './spec-files.ts';
 
-const dir = fileURLToPath(new URL('../vendor/spec/examples/', import.meta.url));
+const dir = specPath('examples/');
 const example = (name: string) => parse(readFileSync(`${dir}${name}.ask`, 'utf8')).form;
 const compile = (form: Form) =>
   new Ajv2020({ allErrors: true, strict: true, validateFormats: false }).compile(responseSchema(form));

@@ -1,11 +1,11 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { Ajv2020 } from 'ajv/dist/2020.js';
 import { describe, expect, it } from 'vitest';
 import { type Form, parse, pinIds, serialize, validateForm } from '../src/index.ts';
+import { specPath } from './spec-files.ts';
 
-const dir = fileURLToPath(new URL('../vendor/spec/examples/', import.meta.url));
-const schema = JSON.parse(readFileSync(new URL('../vendor/spec/askdown.schema.json', import.meta.url), 'utf8'));
+const dir = specPath('examples/');
+const schema = JSON.parse(readFileSync(specPath('askdown.schema.json'), 'utf8'));
 const ajv = new Ajv2020({ allErrors: true, strict: false, validateFormats: false });
 const validate = ajv.compile(schema);
 

@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { expect, it } from 'vitest';
 import { parse } from '../src/index.ts';
+import { specPath } from './spec-files.ts';
 
-const spec = readFileSync(new URL('../vendor/spec/askdown.md', import.meta.url), 'utf8');
+const spec = readFileSync(specPath('askdown.md'), 'utf8');
 const examples = [...spec.matchAll(/^```askdown\n([\s\S]*?)^```$/gm)].map((m) => m[1]!);
 
 it('finds examples in the spec', () => {

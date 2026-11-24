@@ -10,9 +10,10 @@ import {
   validateResponse,
   visitedPages,
 } from '../src/index.ts';
+import { specPath } from './spec-files.ts';
 
 const q = (source: string) => parse(source).form.pages[0]!.items[0] as Question;
-const branching = parse(readFileSync(new URL('../vendor/spec/examples/branching.ask', import.meta.url), 'utf8')).form;
+const branching = parse(readFileSync(specPath('examples/branching.ask'), 'utf8')).form;
 
 describe('checkAnswer', () => {
   it.each<[string, unknown, ReturnType<typeof checkAnswer>]>([
