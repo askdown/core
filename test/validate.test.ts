@@ -155,6 +155,12 @@ describe('checkAnswer', () => {
     ['? A *\n[switch]', undefined, { error: 'Switch this on to continue.' }],
     ['? A *\n[switch]', false, { error: 'Switch this on to continue.' }],
     ['? A *\n[switch]', true, { value: true }],
+    ['? A\n[color]', '#1F6F6A', { value: '#1f6f6a' }],
+    ['? A\n[color]', '#abc', { value: '#aabbcc' }],
+    ['? A\n[color]', ' ', {}],
+    ['? A *\n[color]', undefined, { error: 'This question is required.' }],
+    ['? A\n[color]', 'red', { error: 'Choose a colour.' }],
+    ['? A\n[color]', 5, { error: 'Expected text.' }],
   ])('%j with %j', (source, input, expected) => {
     expect(checkAnswer(q(source), input)).toEqual(expected);
   });

@@ -181,6 +181,8 @@ function serializeAnswer(q: Question): string[] {
       return [`[address${attrs({ country: q.country })}]`];
     case 'switch':
       return [`[switch${attrs({ on: q.default })}]`];
+    case 'color':
+      return [`[color${attrs({ default: q.default })}]`];
     case 'file':
       return [
         `[file${attrs({

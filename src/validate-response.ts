@@ -2,7 +2,7 @@ import { addressFormat } from './address-formats.ts';
 import { toE164 } from './phone.ts';
 import { isCountryCode } from './countries.ts';
 import { visitedPages } from './navigation.ts';
-import { formatSize } from './parse.ts';
+import { formatSize, normalizeColor } from './parse.ts';
 import {
   type Address,
   type Answers,
@@ -81,6 +81,13 @@ function normalize(q: Question, input: unknown): AnswerCheck {
   }
   if (input === undefined || input === null) return {};
   switch (q.type) {
+    case 'color': {
+      if (typeof input !== 'string') return { error: 'Expected text.' };
+      if (input.trim() === '') return {};
+      const value = normalizeColor(input);
+      if (value === undefined) return { error: 'Choose a colour.' };
+      return { value };
+    }
     case 'phone': {
       if (typeof input !== 'string') return { error: 'Expected text.' };
       const text = input.trim();

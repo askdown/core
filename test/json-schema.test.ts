@@ -102,6 +102,13 @@ describe('responseSchema', () => {
     expect(required({ a: false })).toBe(false);
   });
 
+  it('describes colours', () => {
+    const validate = compile(form('? A\n[color]'));
+    expect(validate({ a: '#1f6f6a' })).toBe(true);
+    expect(validate({ a: '#1F6F6A' })).toBe(false);
+    expect(validate({ a: 'red' })).toBe(false);
+  });
+
   it('describes addresses', () => {
     const validate = compile(form('? A\n[address]\n\n? B\n[address country=NL]\n\n? C\n[address country=CA]'));
     const us = { street: 'Main St 1', city: 'Springfield', region: 'IL', postalCode: '62701', country: 'US' };

@@ -173,6 +173,12 @@ describe('parse', () => {
     expect(b).toEqual({ id: 'b', type: 'switch', label: 'B', required: true, default: true });
   });
 
+  it('parses colours, normalizing the default', () => {
+    const [a, b] = questions(parse('? A\n[color]\n\n? B\n[color default=#ABC]').form);
+    expect(a).toEqual({ id: 'a', type: 'color', label: 'A' });
+    expect(b).toEqual({ id: 'b', type: 'color', label: 'B', default: '#aabbcc' });
+  });
+
   it('does not infer a switch from a single checkbox option', () => {
     const [q] = questions(parse('? A\n- [ ] Yes').form);
     expect(q).toMatchObject({ type: 'checkbox' });
@@ -191,6 +197,7 @@ describe('parse', () => {
     ['? A\n[toggle]', '2:error:Unknown question type "toggle".'],
     ['? A\n[switch]\n- X', '3:error:Options are not allowed on a switch question.'],
     ['? A\n[switch off]', '2:warning:Unknown attribute "off" for switch.'],
+    ['? A\n[color default=red]', '2:error:Invalid colour "red". Use #rrggbb, such as #1f6f6a.'],
     ['? A\n- ( ) X\n- [ ] Y', '1:error:Mix of ( ) and [ ] options. Use ( ) for single choice or [ ] for multiple choice.'],
     ['? A\n1. X\n- [ ] Y', '1:error:Mix of numbered and ( ) or [ ] options. Use numbered options only for a ranking.'],
     ['? A\n1. X', '1:error:A ranking needs at least two options.'],
@@ -410,6 +417,8 @@ describe('serialize', () => {
             { id: 'f', type: 'paragraph', label: 'f', help: 'line 1\n\nline 3' },
             { id: 'g', type: 'switch', label: 'g' },
             { id: 'h', type: 'switch', label: 'h', required: true, default: true },
+            { id: 'i', type: 'color', label: 'i' },
+            { id: 'j', type: 'color', label: 'j', default: '#1f6f6a' },
           ],
         },
       ],

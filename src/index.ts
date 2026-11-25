@@ -1,5 +1,5 @@
 export * from './types.ts';
-export { parse, parseSize, formatSize, type ParseResult, type SourceLocation } from './parse.ts';
+export { parse, parseSize, formatSize, normalizeColor, type ParseResult, type SourceLocation } from './parse.ts';
 export { serialize, type SerializeOptions } from './serialize.ts';
 export { pinIds } from './pin-ids.ts';
 export { slugify, uniqueId, ID_PATTERN } from './ids.ts';
