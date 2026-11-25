@@ -177,6 +177,8 @@ function answerSchema(q: Question): JsonSchema {
         })),
       };
     }
+    case 'color':
+      return { type: 'string', pattern: '^#[0-9a-f]{6}$' };
     case 'switch':
       // A required switch must be on.
       return q.required ? { const: true } : { type: 'boolean' };

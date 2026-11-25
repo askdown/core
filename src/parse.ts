@@ -883,6 +883,15 @@ function parseQuestion(
     case 'switch':
       question = clean({ ...base, type, default: flag('on') });
       break;
+    case 'color': {
+      const raw = str('default');
+      const color = raw === undefined ? undefined : normalizeColor(raw);
+      if (raw !== undefined && color === undefined) {
+        error(typeLine, `Invalid colour "${raw}". Use #rrggbb, such as #1f6f6a.`);
+      }
+      question = clean({ ...base, type, default: color });
+      break;
+    }
   }
 
   if (typeSpec) {
@@ -948,6 +957,14 @@ const SIZE_UNITS: Record<string, number> = {
   mb: 1024 ** 2,
   gb: 1024 ** 3,
 };
+
+/** `#rrggbb` or `#rgb`, in any case, as lowercase `#rrggbb`; undefined when it's neither. */
+export function normalizeColor(input: string): string | undefined {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(input.trim());
+  if (!m) return undefined;
+  const hex = m[1]!.toLowerCase();
+  return `#${hex.length === 3 ? hex.replace(/./g, '$&$&') : hex}`;
+}
 
 export function parseSize(input: string): number | undefined {
   const m = /^(\d+(?:\.\d+)?)\s*([kmg]?b)?$/i.exec(input.trim());

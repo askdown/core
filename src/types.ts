@@ -224,6 +224,13 @@ export interface SwitchQuestion extends QuestionBase {
   default?: boolean;
 }
 
+/** An sRGB colour. The answer is `#rrggbb`, lowercase. */
+export interface ColorQuestion extends QuestionBase {
+  type: 'color';
+  /** Starting colour, as `#rrggbb`, lowercase. */
+  default?: string;
+}
+
 export type Question =
   | TextQuestion
   | ParagraphQuestion
@@ -242,7 +249,8 @@ export type Question =
   | GridQuestion
   | FileQuestion
   | AddressQuestion
-  | SwitchQuestion;
+  | SwitchQuestion
+  | ColorQuestion;
 
 export type QuestionType = Question['type'];
 
@@ -266,6 +274,7 @@ export const QUESTION_TYPES: readonly QuestionType[] = [
   'file',
   'address',
   'switch',
+  'color',
 ];
 
 export type ChoiceQuestion = RadioQuestion | CheckboxQuestion | SelectQuestion;
@@ -317,6 +326,7 @@ export interface Address {
  * - file: FileRef[]
  * - address: Address
  * - switch: boolean
+ * - color: string, as #rrggbb in lowercase
  *
  * Choices store their `value` (which defaults to the `label`). For radio and
  * checkbox, a value that isn't one of the option values is the text of the

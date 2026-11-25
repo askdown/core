@@ -100,6 +100,11 @@ export function validateForm(form: Form): FormProblem[] {
             if (new Set(colValues).size !== colValues.length) problem(`${path}/columns`, 'Columns must be unique.');
           }
           break;
+        case 'color':
+          if (q.default !== undefined && !/^#[0-9a-f]{6}$/.test(q.default)) {
+            problem(`${path}/default`, `Invalid colour "${q.default}".`);
+          }
+          break;
         case 'phone':
         case 'address':
           if (q.country !== undefined && !isCountryCode(q.country)) {
