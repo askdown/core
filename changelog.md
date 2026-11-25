@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.1 (????-??-??)
+0.3.1 (2026-11-25)
 ------------------
 
 * Added a Test workflow that type-checks, tests and builds on every push to
